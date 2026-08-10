@@ -1,1 +1,0 @@
-# kinm-memory-check.-Public
