@@ -495,6 +495,9 @@ function renderQuiz(){
       <div class="options" id="recallOpts">
         ${memWords.map((w,i)=>`<label class="opt" data-i="${i}"><input type="checkbox">${w}</label>`).join('')}
       </div>
+      <div class="options" style="margin-top:10px;">
+        <label class="opt" id="recallNoneOpt"><input type="checkbox" id="recallNoneCheck">전혀 기억하지 못하셨어요</label>
+      </div>
     </div>
 
     <div class="card">
@@ -569,8 +572,34 @@ function renderQuiz(){
       recallChecked[+opt.dataset.i] = cb.checked;
       quizAnswers.recall = recallChecked.filter(Boolean).length;
       quizAnswers._recallAnswered = true;
+      // 단어를 하나라도 선택하면 '기억 못함' 선택은 자동 해제
+      if(cb.checked){
+        document.getElementById('recallNoneOpt').classList.remove('checked');
+        document.getElementById('recallNoneCheck').checked = false;
+      }
       checkStep2Complete();
     });
+  });
+
+  // 전혀 기억하지 못함
+  document.getElementById('recallNoneOpt').addEventListener('click', ()=>{
+    const noneCb = document.getElementById('recallNoneCheck');
+    const nowChecked = !noneCb.checked;
+    noneCb.checked = nowChecked;
+    document.getElementById('recallNoneOpt').classList.toggle('checked', nowChecked);
+    if(nowChecked){
+      // 개별 단어 체크는 모두 해제
+      recallChecked = [false,false,false];
+      document.querySelectorAll('#recallOpts .opt').forEach(o=>{
+        o.classList.remove('checked');
+        o.querySelector('input').checked = false;
+      });
+      quizAnswers.recall = 0;
+      quizAnswers._recallAnswered = true;
+    } else {
+      quizAnswers._recallAnswered = recallChecked.some(Boolean);
+    }
+    checkStep2Complete();
   });
 
   // 이름
@@ -597,7 +626,7 @@ function checkStep2Complete(){
     quizScore += quizAnswers.date ? 0 : 2;
     quizScore += quizAnswers.season ? 0 : 1;
     quizScore += quizAnswers.calc ? 0 : 2;
-    quizScore += (3 - quizAnswers.recall) * 1.5;
+    quizScore += (3 - quizAnswers.recall); // 3개 맞음=0점, 2개=1점, 1개=2점, 0개=3점
     quizScore += quizAnswers.name === 'no' ? 2 : 0;
   }
 }
