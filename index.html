@@ -199,7 +199,7 @@
     font-weight:700;
     font-size:15px;
     background:var(--paper);
-    border:1.5px dashed var(--teal);
+    border:1.5px solid var(--teal);
     color:var(--teal-dark);
     padding:8px 16px;
     border-radius:8px;
@@ -455,9 +455,9 @@ function renderQuiz(){
   area.innerHTML = `
     <div class="card">
       <div class="q-num">Q1 · 기억력</div>
-      <div class="q-text">아래 세 단어를 부모님께 들려주고, 그대로 따라 말씀해 보시라고 해주세요.</div>
+      <div class="q-text">아래 세 단어를 부모님께 들려주고, 그대로 따라 말씀해 보시라고 해주세요. 그대로 따라 말씀하셨다면 조금 이따 여쭤볼 것이니 기억해두라고 하세요.</div>
       <div class="word-box">${memWords.map(w=>`<span class="word-chip">${w}</span>`).join('')}</div>
-      <p class="q-help">이 단어는 잠시 후 Q5에서 다시 여쭤볼게요. 지금은 외우고 계시라고만 안내해주세요.</p>
+      <p class="q-help" style="margin-top:14px;">이 단어는 잠시 후 Q5에서 다시 여쭤볼게요. 지금은 외우고 계시라고만 안내해주세요.</p>
       <div class="options" id="registerOpts">
         <label class="opt" data-val="yes"><input type="radio" name="registerCheck">예, 세 단어 모두 따라 말씀하셨어요</label>
         <label class="opt" data-val="no"><input type="radio" name="registerCheck">아니요, 일부만 말씀하시거나 어려워하셨어요</label>
@@ -490,7 +490,7 @@ function renderQuiz(){
 
     <div class="card">
       <div class="q-num">Q5 · 지연회상</div>
-      <div class="q-text">Q1에서 말씀드렸던 세 단어, 기억하고 계신가요?</div>
+      <div class="q-text">아까 기억하라고 했던 단어를 여쭤보세요. 기억하고 계신가요?</div>
       <p class="q-help">힌트 없이 부모님이 직접 말씀하신 단어에 체크해주세요.</p>
       <div class="options" id="recallOpts">
         ${memWords.map((w,i)=>`<label class="opt" data-i="${i}"><input type="checkbox">${w}</label>`).join('')}
@@ -524,7 +524,7 @@ function renderQuiz(){
   const monthSel = document.getElementById('dMonth');
   const daySel = document.getElementById('dDay');
   const thisYear = today.getFullYear();
-  yearSel.innerHTML = `<option value="">연도</option>` + [thisYear-1,thisYear,thisYear+1].map(y=>`<option value="${y}">${y}년</option>`).join('');
+  yearSel.innerHTML = `<option value="">연도</option>` + Array.from({length:31},(_,i)=>thisYear-25+i).map(y=>`<option value="${y}">${y}년</option>`).join('');
   monthSel.innerHTML = `<option value="">월</option>` + Array.from({length:12},(_,i)=>i+1).map(m=>`<option value="${m}">${m}월</option>`).join('');
   daySel.innerHTML = `<option value="">일</option>` + Array.from({length:31},(_,i)=>i+1).map(d=>`<option value="${d}">${d}일</option>`).join('');
 
@@ -635,7 +635,18 @@ function showResult(){
     <p class="result-msg">${msg}</p>
     ${showClinic ? `
     <div class="clinic-card">
-      <div class="name">경일신경과내과의원</div>
+      <div class="clinic-map" style="margin-bottom:16px; border-radius:10px; overflow:hidden; border:1px solid var(--line);">
+        <iframe
+          src="https://www.google.com/maps?q=%EB%8C%80%EA%B5%AC%EA%B4%91%EC%97%AD%EC%8B%9C%20%EB%8B%AC%EC%84%9C%EA%B5%AC%20%EB%8B%AC%EA%B5%AC%EB%B2%8C%EB%8C%80%EB%A1%9C%201814&output=embed"
+          width="100%" height="180" style="border:0; display:block;" loading="lazy">
+        </iframe>
+      </div>
+      <div class="name" style="display:flex; align-items:center; gap:8px;">
+        <img src="logo.png" alt="경일신경과내과의원 로고"
+             style="width:22px; height:22px; object-fit:contain; flex:none;"
+             onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2222%22 height=%2222%22><rect width=%2222%22 height=%2222%22 rx=%224%22 fill=%22%23F1F6F4%22 stroke=%22%23D8DED2%22/></svg>';">
+        <span>경일신경과내과의원</span>
+      </div>
       <div class="info">
         전화 문의 · 053-652-2525<br>
         진료시간 · 08:00–18:00 (12:30–14:00 휴게)<br>
