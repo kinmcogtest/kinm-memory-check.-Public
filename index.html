@@ -455,6 +455,69 @@ let recallChecked = [false,false,false];
 
 let quizAnswers = { date:false, season:false, recall:0, calc:false, name:null };
 
+/* 100에서 7씩 4회 연속 빼기 - 각 단계는 '직전에 부모님이 답한 값'에서 7을 뺀 값과 일치하는지로 채점 */
+const calcPrompts = [
+  "100에서 7을 빼면 얼마인가요?",
+  "거기서 다시 7을 빼면요?",
+  "또 7을 빼면요?",
+  "마지막으로 한 번 더 7을 빼면요?"
+];
+let calcStepIdx = 0;
+let calcPrev = 100;
+let calcResults = []; // true/false, 4개까지
+
+function renderCalcStep(){
+  const area = document.getElementById('calcArea');
+  if(!area) return;
+
+  if(calcStepIdx >= 4){
+    // 종료: 결과 요약 표시
+    const correctCount = calcResults.filter(Boolean).length;
+    area.innerHTML = `<p class="q-help" style="margin:0;">완료됐어요 (정답 ${correctCount} / ${calcResults.length}문항)</p>`;
+    return;
+  }
+
+  area.innerHTML = `
+    <p class="q-help" style="margin:0 0 10px;">${calcStepIdx+1} / 4번째</p>
+    <div class="q-text" style="margin-bottom:10px;">${calcPrompts[calcStepIdx]}</div>
+    <input type="number" id="calcInput" placeholder="숫자를 입력해주세요" style="margin-bottom:10px;">
+    <div class="nav" style="margin-top:0;">
+      <button type="button" class="btn btn-primary" id="calcNextBtn" disabled>다음</button>
+      <button type="button" class="btn btn-ghost" id="calcDontKnowBtn">모르겠다</button>
+    </div>
+  `;
+
+  const input = document.getElementById('calcInput');
+  const nextBtn = document.getElementById('calcNextBtn');
+  input.addEventListener('input', ()=>{
+    nextBtn.disabled = (input.value === '');
+  });
+  nextBtn.addEventListener('click', ()=>{
+    const val = +input.value;
+    const correct = (val === calcPrev - 7);
+    calcResults.push(correct);
+    calcPrev = val; // 이후 단계는 부모님이 답한 값을 기준으로 계속 이어서 채점
+    calcStepIdx++;
+    finalizeIfDone();
+    renderCalcStep();
+  });
+  document.getElementById('calcDontKnowBtn').addEventListener('click', ()=>{
+    // 남은 문항은 모두 오답 처리하고 종료
+    while(calcResults.length < 4){ calcResults.push(false); }
+    calcStepIdx = 4;
+    finalizeIfDone();
+    renderCalcStep();
+  });
+}
+
+function finalizeIfDone(){
+  if(calcStepIdx >= 4){
+    quizAnswers.calcCorrectCount = calcResults.filter(Boolean).length;
+    quizAnswers._calcAnswered = true;
+    checkStep2Complete();
+  }
+}
+
 function renderQuiz(){
   const area = document.getElementById('quizArea');
   area.innerHTML = `
@@ -489,8 +552,8 @@ function renderQuiz(){
 
     <div class="card">
       <div class="q-num">Q4 · 주의집중</div>
-      <div class="q-text">100에서 7을 빼면 얼마인가요?</div>
-      <input type="number" id="calcInput" placeholder="숫자를 입력해주세요">
+      <div class="q-text">100에서 7씩 계속 빼보겠습니다. 부모님께 순서대로 여쭤보고, 답하신 숫자를 입력해주세요.</div>
+      <div id="calcArea"></div>
     </div>
 
     <div class="card">
@@ -561,12 +624,8 @@ function renderQuiz(){
     });
   });
 
-  // 계산
-  document.getElementById('calcInput').addEventListener('input', (e)=>{
-    quizAnswers.calc = (+e.target.value === 93);
-    quizAnswers._calcAnswered = e.target.value !== '';
-    checkStep2Complete();
-  });
+  // 계산 (100에서 7씩 4회 연속 빼기)
+  renderCalcStep();
 
   // 단어 회상
   document.querySelectorAll('#recallOpts .opt').forEach(opt=>{
@@ -630,7 +689,7 @@ function checkStep2Complete(){
     quizScore += quizAnswers.register ? 0 : 1.5;
     quizScore += quizAnswers.date ? 0 : 2;
     quizScore += quizAnswers.season ? 0 : 1;
-    quizScore += quizAnswers.calc ? 0 : 2;
+    quizScore += (4 - (quizAnswers.calcCorrectCount || 0)) * 0.5; // 4문항 중 오답 1개당 0.5점 감점 (최대 2점)
     quizScore += (3 - quizAnswers.recall); // 3개 맞음=0점, 2개=1점, 1개=2점, 0개=3점
     quizScore += quizAnswers.name === 'no' ? 2 : 0;
   }
@@ -683,6 +742,9 @@ function showResult(){
         위치 · 대구광역시 달서구 달구벌대로 1814
       </div>
     </div>`}
+    <p style="font-family:'Noto Serif KR',serif; font-weight:900; font-size:26px; text-align:center; margin:22px 0 18px;">
+      "<span style="color:var(--teal);">치매예방</span>은 <span style="color:var(--amber);">인지검사</span>부터"
+    </p>
     <button class="share-btn" onclick="shareResult()">가족에게 공유하기</button>
     <div class="disclaimer">이 결과는 의학적 진단이 아닌 참고용 선별 도구입니다. 정확한 진단은 전문의 상담을 통해 받으시기 바랍니다.</div>
     <div class="restart" onclick="restart()">처음부터 다시 하기</div>
@@ -709,6 +771,7 @@ function restart(){
   checklistAnswers = new Array(checklistItems.length).fill(null);
   quizAnswers = { date:false, season:false, recall:0, calc:false, name:null };
   recallChecked = [false,false,false];
+  calcStepIdx = 0; calcPrev = 100; calcResults = [];
   checklistScore = 0; quizScore = 0;
   renderChecklist();
   renderQuiz();
