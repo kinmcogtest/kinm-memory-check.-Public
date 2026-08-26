@@ -104,19 +104,19 @@
   h1{
     font-family:'Noto Serif KR',serif;
     font-weight:900;
-    font-size:28px;
+    font-size:32px;
     line-height:1.35;
     margin:0 0 14px;
     color:var(--ink);
   }
   .lede{
-    font-size:15px;
+    font-size:17px;
     line-height:1.7;
     color:var(--ink-soft);
     margin:0 0 26px;
   }
   .disclaimer{
-    font-size:12px;
+    font-size:14px;
     color:var(--ink-soft);
     line-height:1.6;
     background:rgba(0,0,0,0.03);
@@ -135,20 +135,20 @@
   }
   .q-num{
     font-family:'Noto Serif KR',serif;
-    font-size:12px;
+    font-size:13px;
     color:var(--teal);
     font-weight:700;
     letter-spacing:0.08em;
     margin-bottom:6px;
   }
   .q-text{
-    font-size:16px;
+    font-size:18px;
     font-weight:600;
     line-height:1.5;
     margin-bottom:14px;
   }
   .q-help{
-    font-size:13px;
+    font-size:15px;
     color:var(--ink-soft);
     margin:-8px 0 14px;
     line-height:1.6;
@@ -167,7 +167,7 @@
     border:1.5px solid var(--line);
     border-radius:10px;
     cursor:pointer;
-    font-size:14px;
+    font-size:16px;
     transition:border-color .15s ease, background .15s ease;
     user-select:none;
   }
@@ -178,7 +178,7 @@
   .row-inline{display:flex;gap:8px;}
   select, input[type=number]{
     font-family:'Noto Sans KR',sans-serif;
-    font-size:15px;
+    font-size:17px;
     padding:12px 10px;
     border:1.5px solid var(--line);
     border-radius:10px;
@@ -197,7 +197,7 @@
   .word-chip{
     font-family:'Noto Serif KR',serif;
     font-weight:700;
-    font-size:15px;
+    font-size:17px;
     background:var(--paper);
     border:1.5px solid var(--teal);
     color:var(--teal-dark);
@@ -213,7 +213,7 @@
   }
   button.btn{
     font-family:'Noto Sans KR',sans-serif;
-    font-size:15px;
+    font-size:17px;
     font-weight:700;
     padding:14px 20px;
     border-radius:10px;
@@ -230,7 +230,7 @@
   .result-badge{
     font-family:'Noto Serif KR',serif;
     font-weight:900;
-    font-size:34px;
+    font-size:36px;
     padding:26px 22px;
     border-radius:var(--radius);
     margin-bottom:18px;
@@ -239,7 +239,7 @@
   .result-badge .tag{
     display:block;
     font-family:'Noto Sans KR',sans-serif;
-    font-size:12px;
+    font-size:13px;
     font-weight:700;
     letter-spacing:0.1em;
     opacity:0.85;
@@ -251,7 +251,7 @@
   .tier-3{background:linear-gradient(135deg,#A8402D,#7E2C1E);}
 
   .result-msg{
-    font-size:15px;
+    font-size:17px;
     line-height:1.7;
     color:var(--ink);
     margin-bottom:20px;
@@ -266,12 +266,12 @@
   .clinic-card .name{
     font-family:'Noto Serif KR',serif;
     font-weight:700;
-    font-size:17px;
+    font-size:19px;
     color:var(--teal-dark);
     margin-bottom:6px;
   }
   .clinic-card .info{
-    font-size:13px;
+    font-size:15px;
     color:var(--ink-soft);
     line-height:1.7;
   }
@@ -280,7 +280,7 @@
     background:transparent;
     border:1.5px solid var(--line);
     color:var(--ink-soft);
-    font-size:14px;
+    font-size:16px;
     font-weight:600;
     padding:13px;
     border-radius:10px;
@@ -289,7 +289,7 @@
   }
   .restart{
     text-align:center;
-    font-size:13px;
+    font-size:14px;
     color:var(--ink-soft);
     text-decoration:underline;
     cursor:pointer;
@@ -297,7 +297,7 @@
   }
 
   .footer-note{
-    font-size:11px;
+    font-size:12px;
     color:var(--ink-soft);
     text-align:center;
     padding:16px 24px 24px;
@@ -309,13 +309,18 @@
 <div class="app">
 
   <div class="topbar">
-    <div class="brand">경일신경과 · 기억 체크</div>
+    <div></div>
     <div class="progress" id="progressDots"></div>
   </div>
 
   <!-- STAGE 0: 인트로 -->
   <div class="stage visible" data-stage="0">
-    <div class="stamp"><div class="circle">今</div><span class="label">오늘, 5분</span></div>
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
+      <img src="logo.png" alt="경일신경과내과의원 로고"
+           style="width:40px; height:40px; object-fit:contain; flex:none;"
+           onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22></svg>';">
+      <span style="font-family:'Noto Serif KR',serif; font-weight:900; font-size:28px; line-height:1.35; color:var(--ink);">경일신경과내과의원</span>
+    </div>
     <h1>부모님과 함께,<br>5분 기억 체크</h1>
     <p class="lede">짧은 질문 몇 가지로 오늘의 기억력을 살펴봐요.<br>자녀분이 옆에서 함께 읽고, 부모님이 답해주시면 됩니다.</p>
     <div class="disclaimer">이 체크는 의학적 진단이 아닌 참고용 선별 도구입니다. 정확한 진단은 전문의 상담을 통해 받으시기 바랍니다.</div>
@@ -327,7 +332,7 @@
   <!-- STAGE 1: 보호자 관찰 체크리스트 -->
   <div class="stage" data-stage="1">
     <div class="stamp"><div class="circle">1</div><span class="label">STEP 1 · 요즘 어떠셨나요</span></div>
-    <h1 style="font-size:22px;">최근 몇 달, 부모님을 지켜보며</h1>
+    <h1 style="font-size:24px;">최근 몇 달, 부모님을 지켜보며</h1>
     <p class="lede">느끼신 점을 편하게 체크해주세요.</p>
     <div id="checklistArea"></div>
     <div class="nav">
@@ -339,7 +344,7 @@
   <!-- STAGE 2: 함께 풀어보는 문제 -->
   <div class="stage" data-stage="2">
     <div class="stamp"><div class="circle">2</div><span class="label">STEP 2 · 함께 풀어봐요</span></div>
-    <h1 style="font-size:22px;">자녀분이 소리 내어 읽고,</h1>
+    <h1 style="font-size:24px;">자녀분이 소리 내어 읽고,</h1>
     <p class="lede">부모님이 답해주시면 자녀분이 체크해주세요.</p>
     <div id="quizArea"></div>
     <div class="nav">
@@ -634,24 +639,20 @@ function checkStep2Complete(){
 /* ---------------- 결과 ---------------- */
 function showResult(){
   const total = checklistScore + quizScore;
-  let tier, tierIdx, title, msg, showClinic;
+  let tier, tierIdx, title, msg;
 
   if(total <= 5){
     tierIdx = 0; tier="정상"; title="오늘은 특별한 신호가 보이지 않아요";
     msg = "체크한 항목들에서 뚜렷한 위험 신호는 확인되지 않았어요. 그래도 이런 시간을 정기적으로 가져보시는 것 자체가 큰 의미가 있어요.";
-    showClinic = false;
   } else if(total <= 10){
     tierIdx = 1; tier="위험군"; title="몇 가지 확인이 필요해 보여요";
     msg = "일부 항목에서 평소와 다른 모습이 확인됐어요. 대부분 자연스러운 노화 과정일 수 있지만, 편하게 한번 상담받아보시는 것도 좋은 방법이에요.";
-    showClinic = true;
   } else if(total <= 16){
     tierIdx = 2; tier="고위험군"; title="정밀 검사를 권해드려요";
     msg = "여러 항목에서 반복적인 어려움이 확인됐어요. 조기 발견과 관리가 무엇보다 중요한 시기이니, 가까운 시일 내 전문의 상담을 받아보시길 권해드려요.";
-    showClinic = true;
   } else {
     tierIdx = 3; tier="내원 필요군"; title="가까운 시일 내 전문의를 만나보세요";
     msg = "여러 영역에서 뚜렷한 어려움의 신호가 확인됐어요. 지금 바로 진단을 의미하지는 않지만, 정확한 확인을 위해 전문의 상담을 받아보시길 권해드려요.";
-    showClinic = true;
   }
 
   const area = document.getElementById('resultArea');
@@ -660,9 +661,9 @@ function showResult(){
       <span class="tag">체크 결과</span>
       ${tier}
     </div>
-    <h1 style="font-size:20px;">${title}</h1>
+    <h1 style="font-size:22px;">${title}</h1>
     <p class="result-msg">${msg}</p>
-    ${showClinic ? `
+    ${`
     <div class="clinic-card">
       <div class="clinic-map" style="margin-bottom:16px; border-radius:10px; overflow:hidden; border:1px solid var(--line);">
         <iframe
@@ -681,7 +682,7 @@ function showResult(){
         진료시간 · 08:00–18:00 (12:30–14:00 휴게)<br>
         위치 · 대구광역시 달서구 달구벌대로 1814
       </div>
-    </div>` : ''}
+    </div>`}
     <button class="share-btn" onclick="shareResult()">가족에게 공유하기</button>
     <div class="disclaimer">이 결과는 의학적 진단이 아닌 참고용 선별 도구입니다. 정확한 진단은 전문의 상담을 통해 받으시기 바랍니다.</div>
     <div class="restart" onclick="restart()">처음부터 다시 하기</div>
