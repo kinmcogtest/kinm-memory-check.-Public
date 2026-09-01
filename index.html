@@ -304,6 +304,7 @@
     line-height:1.6;
   }
 </style>
+<script data-goatcounter="https://kinmcogtest.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 <div class="app">
@@ -681,6 +682,15 @@ function checkStep2Complete(){
 function showResult(){
   const total = checklistScore + quizScore;
   let tier, tierIdx, title, msg;
+
+  // 최종 결과까지 도달한 사람만 별도로 집계 (goatcounter 이벤트)
+  if (window.goatcounter && window.goatcounter.count) {
+    window.goatcounter.count({
+      path: 'result-completed',
+      title: '검사 완료',
+      event: true
+    });
+  }
 
   if(total <= 5){
     tierIdx = 0; tier="양호"; title="오늘은 특별한 신호가 보이지 않아요";
